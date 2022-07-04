@@ -1,0 +1,233 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      8347,        225]
+NotebookOptionsPosition[      7873,        208]
+NotebookOutlinePosition[      8267,        224]
+CellTagsIndexPosition[      8224,        221]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"compute", " ", "the", " ", "Wasserstein", " ", "distance"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"WassersteinDistance", "[", 
+      RowBox[{"xa_", ",", "xb_", ",", "cost_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"res", ",", "sol"}], "}"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "xa", "]"}], "\[Equal]", 
+           RowBox[{"Length", "[", "xb", "]"}]}], "&&", 
+          RowBox[{
+           RowBox[{"Abs", "[", 
+            RowBox[{
+             RowBox[{"Total", "[", "xa", "]"}], "-", 
+             RowBox[{"Total", "[", "xb", "]"}]}], "]"}], "<", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "10"}]]}]}], ",", 
+         RowBox[{
+          RowBox[{"res", "=", 
+           RowBox[{"LinearOptimization", "[", 
+            RowBox[{
+             RowBox[{"Total", "[", 
+              RowBox[{
+               RowBox[{"Inactivate", "[", 
+                RowBox[{"cost", "*", "pi"}], "]"}], ",", "2"}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Total", "[", 
+                 RowBox[{"pi", ",", 
+                  RowBox[{"{", "2", "}"}]}], "]"}], "\[Equal]", "xb"}], ",", 
+               RowBox[{
+                RowBox[{"Total", "[", "pi", "]"}], "\[Equal]", "xa"}], ",", 
+               RowBox[{"pi", "\[VectorGreaterEqual]", "0"}]}], "}"}], ",", 
+             RowBox[{"pi", "\[Element]", 
+              RowBox[{"Matrices", "[", 
+               RowBox[{"Dimensions", "[", "cost", "]"}], "]"}]}]}], "]"}]}], 
+          ";", "\[IndentingNewLine]", 
+          RowBox[{"sol", "=", 
+           RowBox[{"pi", "/.", "res"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"Return", "[", 
+           RowBox[{"Total", "[", 
+            RowBox[{
+             RowBox[{"cost", "*", "sol"}], ",", "2"}], "]"}], "]"}]}], ",", 
+         RowBox[{"Return", "[", "Infinity", "]"}]}], "]"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "compute", " ", "the", " ", "generalized", " ", "Wasserstein", " ", 
+     "distance"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"GeneralizedWassersteinDistance", "[", 
+      RowBox[{"xa_", ",", "xb_", ",", "cost_", ",", "lambda_"}], "]"}], ":=", 
+     
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"res", ",", "pisol", ",", "xasol", ",", "xbsol"}], "}"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "xa", "]"}], "\[Equal]", 
+          RowBox[{"Length", "[", "xb", "]"}]}], ",", 
+         RowBox[{
+          RowBox[{"res", "=", 
+           RowBox[{"LinearOptimization", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Total", "[", 
+               RowBox[{
+                RowBox[{"Inactivate", "[", 
+                 RowBox[{"cost", "*", "pi"}], "]"}], ",", "2"}], "]"}], "+", 
+              RowBox[{"lambda", "*", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"Total", "[", 
+                  RowBox[{"Inactivate", "[", 
+                   RowBox[{"xa", "-", "xat"}], "]"}], "]"}], "+", 
+                 RowBox[{"Total", "[", 
+                  RowBox[{"Inactivate", "[", 
+                   RowBox[{"xb", "-", "xbt"}], "]"}], "]"}]}], ")"}]}]}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Total", "[", 
+                 RowBox[{"pi", ",", 
+                  RowBox[{"{", "2", "}"}]}], "]"}], "\[Equal]", "xbt"}], ",", 
+               
+               RowBox[{
+                RowBox[{"Total", "[", "pi", "]"}], "\[Equal]", "xat"}], ",", 
+               RowBox[{
+                RowBox[{"Total", "[", "xat", "]"}], "\[Equal]", 
+                RowBox[{"Total", "[", "xbt", "]"}]}], ",", 
+               RowBox[{"pi", "\[VectorGreaterEqual]", "0"}], ",", 
+               RowBox[{"xat", "\[VectorGreaterEqual]", "0"}], ",", 
+               RowBox[{"xbt", "\[VectorGreaterEqual]", "0"}], ",", 
+               RowBox[{"xa", "\[VectorGreaterEqual]", "xat"}], ",", 
+               RowBox[{"xb", "\[VectorGreaterEqual]", "xbt"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"pi", "\[Element]", 
+                RowBox[{"Matrices", "[", 
+                 RowBox[{"Dimensions", "[", "cost", "]"}], "]"}]}], ",", 
+               RowBox[{"xat", "\[Element]", 
+                RowBox[{"Vectors", "[", 
+                 RowBox[{"Dimensions", "[", "xa", "]"}], "]"}]}], ",", 
+               RowBox[{"xbt", "\[Element]", 
+                RowBox[{"Vectors", "[", 
+                 RowBox[{"Dimensions", "[", "xb", "]"}], "]"}]}]}], "}"}]}], 
+            "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"pisol", "=", 
+           RowBox[{"pi", "/.", "res"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"xasol", "=", 
+           RowBox[{"xat", "/.", "res"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"xbsol", "=", 
+           RowBox[{"xbt", "/.", "res"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"Return", "[", 
+           RowBox[{
+            RowBox[{"Total", "[", 
+             RowBox[{
+              RowBox[{"cost", "*", "pisol"}], ",", "2"}], "]"}], "+", 
+            RowBox[{"lambda", "*", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"Total", "[", 
+                RowBox[{"xa", "-", "xasol"}], "]"}], "+", 
+               RowBox[{"Total", "[", 
+                RowBox[{"xb", "-", "xbsol"}], "]"}]}], ")"}]}]}], "]"}]}], 
+         ",", 
+         RowBox[{"Return", "[", "Infinity", "]"}]}], "]"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", "Example", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"xA", "=", 
+     RowBox[{"{", 
+      RowBox[{"20", ",", "5", ",", "2"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"xB", "=", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "6", ",", "20"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"cost", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "1", ",", "2"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "0", ",", "1"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", "1", ",", "0"}], "}"}]}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"lbd", "=", "0.8"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"WassersteinDistance", "[", 
+       RowBox[{"xA", ",", "xB", ",", "cost"}], "]"}], ",", 
+      RowBox[{"GeneralizedWassersteinDistance", "[", 
+       RowBox[{"xA", ",", "xB", ",", "cost", ",", "lbd"}], "]"}]}], "}"}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{3.865937100150237*^9},
+ CellLabel->"In[1]:=",ExpressionUUID->"a5c8be7d-64f8-4102-a320-6132b01ea806"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"37", ",", "29.8`"}], "}"}]], "Print",
+ CellChangeTimes->{3.86593710865317*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"f375ffaf-9ecc-40d8-b929-f263e937211a"]
+}, Open  ]]
+},
+WindowSize->{808, 747},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"12.2 for Mac OS X x86 (64-bit) (February 2, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"f3cb09f4-a9db-4591-8b8c-bc358f675afb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 7052, 175, 623, "Input",ExpressionUUID->"a5c8be7d-64f8-4102-a320-6132b01ea806"],
+Cell[7635, 199, 222, 6, 24, "Print",ExpressionUUID->"f375ffaf-9ecc-40d8-b929-f263e937211a"]
+}, Open  ]]
+}
+]
+*)
+
